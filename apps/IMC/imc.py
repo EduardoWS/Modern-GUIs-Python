@@ -155,7 +155,8 @@ class HeightInput(ctk.CTkFrame):
 
 class UnitSwitcher(ctk.CTkLabel):
     def __init__(self, parent, metric_bool):
-        super().__init__(master=parent, text='metric', text_color=DARK_GREEN, font=ctk.CTkFont(family=FONT, size=SWITCH_FONT_SIZE, weight='bold'))
+        super().__init__(master=parent, text='metric', text_color=DARK_GREEN, 
+                         font=ctk.CTkFont(family=FONT, size=SWITCH_FONT_SIZE, weight='bold'))
         self.place(relx=0.02, rely=0.005, anchor='nw')
         
         self.metric_bool = metric_bool
