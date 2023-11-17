@@ -1,12 +1,21 @@
 import customtkinter as ctk
 from settings import *
 from PIL import Image, ImageTk
+import tkinter as tk
+import ttkbootstrap as ttk
+from datetime import date
 
-class App(ctk.CTk):
+class App(ttk.Window):
     def __init__(self):
-        super().__init__()
+        super().__init__(themename = 'e-library')
         self.title('')
-        self.geometry(f'{APP_SIZE[0]}x{APP_SIZE[1]}')
+        # iniciar tela no centro
+        width = self.winfo_screenwidth() 
+        height = self.winfo_screenheight()
+        x = int(width/2 - int(APP_SIZE[0])/2)
+        y = int(height/2 - int(APP_SIZE[1])/2)
+        self.geometry(f'{APP_SIZE[0]}x{APP_SIZE[1]}+{x}+{y}')
+        
         #self.iconbitmap('empty.ico')
         self.resizable(False, False)
         
@@ -34,12 +43,27 @@ class Widgets():
         
         # frames
         main_frame = ctk.CTkFrame(parent, fg_color=LIGHT_BLUE, corner_radius=20)
-        main_frame.grid(column=1, row=0, rowspan=2, sticky='new', padx=10, pady=10)
+        main_frame.grid(column=1, row=0, rowspan=2, sticky='new', padx=80, pady=40)
         
         
         text_logo = ctk.CTkLabel(master=main_frame, text='e-Library', text_color=BLACK, font=font,
                                  corner_radius=20)
-        text_logo.pack(expand=True, fill='both', padx=10, pady=10)
+        text_logo.pack(expand=True, fill='both', padx=30, pady=30)
+        
+        meter_frame = ctk.CTkFrame(master=parent, fg_color='transparent', corner_radius=20)
+        meter_frame.grid(column=1, row=2, rowspan=5, sticky='nsew', padx=10, pady=10)
+        
+        meter = ttk.Meter(meter_frame,
+                    amounttotal = 100,
+                    amountused = 10,
+                    stepsize=5,
+                    interactive = True,
+                    metertype = 'full',
+                    subtext = 'Meta Anual de Leitura',
+                    bootstyle = 'primary',
+                    meterthickness=15
+                    )
+        meter.pack(expand=True, fill='both', padx=10, pady=10)
         
         
         # buttons
@@ -66,7 +90,7 @@ class Widgets():
  
         
         # button1
-        button1 = ctk.CTkButton(master=frame_buttons, text=' Livros Lidos', 
+        button1 = ctk.CTkButton(master=frame_buttons, text=' Meus Livros', 
                                 command= window1.animate,
                                 border_spacing=10,
                                 fg_color='transparent',
@@ -83,7 +107,7 @@ class Widgets():
         
         
         # button2
-        button2 = ctk.CTkButton(master=frame_buttons, text=' Interesses', 
+        button2 = ctk.CTkButton(master=frame_buttons, text=' Lista de Desejos', 
                                 fg_color='transparent',
                                 border_spacing=10,
                                 text_color=LIGHT_BLUE,
@@ -125,7 +149,7 @@ class Widgets():
 
     def Animated_Window1(self):
         # animated widget
-        animated_panel = SlidePanel(self.parent, -1, 0, self.frame_buttons)
+        animated_panel = SlidePanel(self.parent, 1.0, 0.25, self.frame_buttons)
         
         Window1(animated_panel)
         
@@ -144,14 +168,14 @@ class Window1():
         
         # frames
         main_frame = ctk.CTkFrame(parent, corner_radius=20, fg_color='transparent')
-        main_frame.grid(column=0, row=0, rowspan=2, sticky='nsew', pady=10, padx=10)
+        main_frame.grid(column=0, row=0, sticky='nsew', pady=0, padx=10)
         
         main_frame.columnconfigure(0, weight=1, uniform='b')
         main_frame.columnconfigure(1, weight=8, uniform='b')
         main_frame.rowconfigure(0, weight=1, uniform='b')
         
         back_frame = ctk.CTkFrame(main_frame, corner_radius=100, fg_color='transparent')
-        back_frame.grid(column=0, row=0, sticky='ns', pady=2)
+        back_frame.grid(column=0, row=0, sticky='ns', pady=0)
         
         font_buttons = ctk.CTkFont(family=FONT, size=24, weight='bold')
         frame_books = ctk.CTkFrame(master=parent, fg_color='transparent', corner_radius=20)
@@ -165,20 +189,20 @@ class Window1():
 
 
         # text top
-        font = ctk.CTkFont(family=FONT, size=TOP_TEXT_SIZE, weight='bold')
-        text_top = ctk.CTkLabel(master=main_frame, text='Livros Lidos', text_color=BLACK, font=font,
+        font = ctk.CTkFont(family=FONT, size=INPUT_FONT_SIZE, weight='bold')
+        text_top = ctk.CTkLabel(master=main_frame, text='Meus Livros', text_color=BLACK, font=font,
                                 fg_color=LIGHT_BLUE,
                                  corner_radius=20)
-        text_top.grid(column=1, row=0, sticky='nsew', pady=10, padx=5)
+        text_top.grid(column=1, row=0, sticky='nsew', pady=0, padx=5)
         
         # back button
-        voltar = ctk.CTkButton(master=back_frame, text='<<', 
+        voltar = ctk.CTkButton(master=back_frame, text='>>', 
                                 command= parent.animate,
                                 fg_color=LIGHT_BLUE,
                                 text_color=BLACK,
                                 font=font_buttons,
                                 corner_radius=100)
-        voltar.pack(padx=5, pady=10, expand=True, fill='both')
+        voltar.pack(padx=5, pady=0, expand=True, fill='both')
         
         # add book button
         add_book = ctk.CTkButton(master=frame_add_book, text='+', 
@@ -194,7 +218,7 @@ class Window1():
             global extra
             extra = ctk.CTkToplevel()
             extra.title('Adicionar Livro')
-            extra.geometry('600x512')
+            extra.geometry('500x400')
             extra.resizable(False, False)
             
             # layout
@@ -229,8 +253,11 @@ class Window1():
                                        corner_radius=20)
             title_label.pack(side='left')
             
-            title_entry = ctk.CTkEntry(master=title_frame, font=font_entry,
-                                       border_color=LIGHT_BLUE, height=20)
+            # title_entry = ctk.CTkEntry(master=title_frame, font=font_entry,
+            #                            border_color=LIGHT_BLUE, height=20,
+            #                            placeholder_text='Digite o título do livro')
+            title_entry = ttk.Entry(title_frame, font=font_entry, 
+                                    foreground=LIGHT_BLUE)
             title_entry.pack(side='left', fill='x', expand=True)
             
             
@@ -238,8 +265,10 @@ class Window1():
                                     #    fg_color=LIGHT_BLUE,
                                        corner_radius=20)
             author_label.pack(side='left')
-            author_entry = ctk.CTkEntry(master=author_frame, font=font_entry,
-                                       border_color=LIGHT_BLUE, height=20)
+            # author_entry = ctk.CTkEntry(master=author_frame, font=font_entry,
+            #                            border_color=LIGHT_BLUE, height=20)
+            author_entry = ttk.Entry(author_frame, font=font_entry,
+                                    foreground=LIGHT_BLUE)
             author_entry.pack(side='left', fill='x', expand=True)
             
             
@@ -247,10 +276,15 @@ class Window1():
                                       #    fg_color=LIGHT_BLUE,
                                        corner_radius=20)
             year_label.pack(side='left')
-            year_entry = ctk.CTkEntry(master=year_frame, font=font_entry,
-                                    border_color=LIGHT_BLUE, height=20, width=70
-                                       )
-            year_entry.pack(side='left')
+            # year_entry = ctk.CTkEntry(master=year_frame, font=font_entry,
+            #                         border_color=LIGHT_BLUE, height=20, width=70
+            #                            )
+            year_int = tk.IntVar(value = date.today().year)
+            year_spin = ttk.Spinbox(year_frame, from_ = 1900, 
+                                    to = date.today().year, width=4,
+                                    increment = 1, textvariable = year_int,
+                                    command=lambda: print(year_int.get()))
+            year_spin.pack(side='left')
             obs_label = ctk.CTkLabel(master=year_frame, text='*ano em que você terminou a leitura', text_color=WHITE, font=font_entry,
      
                                        )
@@ -316,20 +350,20 @@ class SlidePanel(ctk.CTkFrame):
             self.animate_backwards()
 
     def animate_forward(self, frame_buttons=None):
-        if self.pos < self.end_pos:
-            self.pos += 0.05
+        if self.pos > self.end_pos:
+            self.pos -= 0.05
             self.place(relx = self.pos, rely = 0, relwidth = self.width, relheight = 1)
             self.after(16, self.animate_forward)
         else:
-            if frame_buttons:
-                for widget in frame_buttons.winfo_children():
-                    widget.destroy()
+            # if frame_buttons:
+            #     for widget in frame_buttons.winfo_children():
+            #         widget.destroy()
             self.in_start_pos = False
             
 
     def animate_backwards(self):
-        if self.pos > self.start_pos:
-            self.pos -= 0.05
+        if self.pos < self.start_pos:
+            self.pos += 0.05
             self.place(relx = self.pos, rely = 0, relwidth = self.width, relheight = 1)
             self.after(16, self.animate_backwards)
         else:

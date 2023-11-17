@@ -4,6 +4,7 @@ from ttkbootstrap.scrolled import ScrolledFrame
 from ttkbootstrap.toast import ToastNotification
 from ttkbootstrap.tooltip import ToolTip
 from ttkbootstrap.widgets import DateEntry, Floodgauge, Meter
+import customtkinter as ctk
 
 # window
 window = ttk.Window(themename = 'darkly')
