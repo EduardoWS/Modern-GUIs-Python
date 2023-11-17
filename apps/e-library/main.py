@@ -229,84 +229,110 @@ class Window1():
             main_frame = ctk.CTkFrame(extra, corner_radius=20, fg_color='transparent')
             main_frame.grid(column=0, row=2, rowspan=8, sticky='nsew', pady=10, padx=10)
             
-            main_frame.columnconfigure(0, weight=1, uniform='d')
+            main_frame.columnconfigure((0,1,2,3), weight=1, uniform='d')
             main_frame.rowconfigure((0,1,2,3,4,5,6,7,8,9), weight=1, uniform='d')
             
-            title_frame = ctk.CTkFrame(main_frame, corner_radius=20, fg_color='transparent')
-            title_frame.grid(column=0, row=2, sticky='nsew', pady=5)
+            back_ground_frame = ctk.CTkFrame(master=main_frame, fg_color='transparent')
+            back_ground_frame.grid(column=0, columnspan=4, row=6, rowspan=4, sticky='nsew')
+            back_ground_frame.columnconfigure((0,1,2,3), weight=1, uniform='d')
+            back_ground_frame.rowconfigure((0,1,2,3), weight=1, uniform='d')
             
-            author_frame = ctk.CTkFrame(main_frame, corner_radius=20, fg_color='transparent')
-            author_frame.grid(column=0, row=3, sticky='nsew', pady=5)
+            hide_frame = ctk.CTkFrame(master=main_frame, fg_color='transparent')
+            # hide_frame.grid(column=0, columnspan=4, row=6, rowspan=4, sticky='nsew')
+            hide_frame.columnconfigure((0,1,2,3), weight=1, uniform='d')
+            hide_frame.rowconfigure((0,1,2,3), weight=1, uniform='d')
             
-            year_frame = ctk.CTkFrame(main_frame, corner_radius=20, fg_color='transparent')
-            year_frame.grid(column=0, row=4, sticky='nsew', pady=5)
-            
-            score_frame = ctk.CTkFrame(main_frame, corner_radius=20, fg_color='transparent')
-            score_frame.grid(column=0, row=5, rowspan=9, sticky='nsew', pady=5)
+
 
             
             # widgets
             font_entry = ctk.CTkFont(family=FONT, size=18, weight='bold')
             
-            title_label = ctk.CTkLabel(master=title_frame, text='Título:', text_color=WHITE, font=font_entry,
+            title_label = ctk.CTkLabel(master=main_frame, text='Título:', text_color=WHITE, font=font_entry,
                                     #    fg_color=LIGHT_BLUE,
                                        corner_radius=20)
-            title_label.pack(side='left')
+            title_label.grid(column=0, row=2, sticky='nsw', pady=5, padx=5)
             
             # title_entry = ctk.CTkEntry(master=title_frame, font=font_entry,
             #                            border_color=LIGHT_BLUE, height=20,
             #                            placeholder_text='Digite o título do livro')
-            title_entry = ttk.Entry(title_frame, font=font_entry, 
-                                    foreground=LIGHT_BLUE)
-            title_entry.pack(side='left', fill='x', expand=True)
+            title_entry = ttk.Entry(main_frame, font=font_entry, 
+                                    foreground=WHITE, style='primary', width=40)
+            title_entry.grid(column=1, columnspan=3, row=2, sticky='nsw', pady=5, padx=5)
             
             
-            author_label = ctk.CTkLabel(master=author_frame, text='Autor:', text_color=WHITE, font=font_entry,
+            author_label = ctk.CTkLabel(master=main_frame, text='Autor:', text_color=WHITE, font=font_entry,
                                     #    fg_color=LIGHT_BLUE,
                                        corner_radius=20)
-            author_label.pack(side='left')
+            author_label.grid(column=0, row=3, sticky='nsw', pady=5, padx=5)
             # author_entry = ctk.CTkEntry(master=author_frame, font=font_entry,
             #                            border_color=LIGHT_BLUE, height=20)
-            author_entry = ttk.Entry(author_frame, font=font_entry,
-                                    foreground=LIGHT_BLUE)
-            author_entry.pack(side='left', fill='x', expand=True)
+            author_entry = ttk.Entry(main_frame, font=font_entry,
+                                    foreground=WHITE, style='primary', width=40)
+            author_entry.grid(column=1, columnspan=3, row=3, sticky='nsw', pady=5, padx=5)
             
             
-            year_label = ctk.CTkLabel(master=year_frame, text='Ano:   ', text_color=WHITE, font=font_entry,
-                                      #    fg_color=LIGHT_BLUE,
+            
+            book_readed = tk.BooleanVar(value=False)
+            readed_label = ctk.CTkLabel(master=main_frame, text='Lido:', text_color=WHITE, font=font_entry,
+                                    #    fg_color=LIGHT_BLUE,
                                        corner_radius=20)
-            year_label.pack(side='left')
-            # year_entry = ctk.CTkEntry(master=year_frame, font=font_entry,
-            #                         border_color=LIGHT_BLUE, height=20, width=70
-            #                            )
-            year_int = tk.IntVar(value = date.today().year)
-            year_spin = ttk.Spinbox(year_frame, from_ = 1900, 
+            readed_label.grid(column=0, row=4, sticky='nsw', pady=5, padx=5)
+            readed_toggle = ttk.Checkbutton(main_frame, bootstyle = 'primary-round-toggle',
+                                            offvalue=False, onvalue=True, variable=book_readed,
+                                            command=lambda: self.func_book_readed(book_readed, hide_frame))
+            readed_toggle.grid(column=1, row=4, pady=5, padx=5, sticky='w')
+            
+            
+            
+            year_label = ctk.CTkLabel(master=hide_frame, text='Ano:', text_color=WHITE, font=font_entry,
+                                #    fg_color=LIGHT_BLUE,
+                                corner_radius=20)
+            year_int = tk.IntVar(value=date.today().year)
+            year_spin = ttk.Spinbox(hide_frame, from_ = 1900, 
                                     to = date.today().year, width=4,
+                                    style='primary', foreground=WHITE,
                                     increment = 1, textvariable = year_int,
-                                    command=lambda: print(year_int.get()))
-            year_spin.pack(side='left')
-            obs_label = ctk.CTkLabel(master=year_frame, text='*ano em que você terminou a leitura', text_color=WHITE, font=font_entry,
-     
-                                       )
-            obs_label.pack(side='right', padx=5)
+                                    )
+            obs_label = ctk.CTkLabel(master=hide_frame, text='*ano em que você terminou a leitura', 
+                                        text_color=WHITE, font=font_entry,)
+            year_label.grid(column=0, row=0, sticky='nsw', pady=5, padx=5)
+            year_spin.grid(column=1, row=0, sticky='nsew', pady=5, padx=5)
+            obs_label.grid(column=2, columnspan=3, row=0, sticky='nsew', pady=5, padx=5)
             
             
+            review_label = ctk.CTkLabel(master=hide_frame, text='Nota:', text_color=WHITE, font=font_entry,
+                                        corner_radius=20)
+            review_int = tk.IntVar(value = 0)
+            review_spin = ttk.Spinbox(hide_frame, from_ = 0,
+                                    to = 10, width=4,
+                                    style='primary', foreground=WHITE,
+                                    increment = 1, textvariable = review_int,
+                                    )
+            review_label.grid(column=0, row=1, sticky='nsw', pady=5, padx=5)
+            review_spin.grid(column=1, row=1, sticky='nsew', pady=5, padx=5)
             
-            
-            
-            
-            
-            
-            
-            
+          
+    
             
             self.bool_window = True
             
             # Adicionando uma função para ser chamada quando a janela é fechada
             extra.protocol("WM_DELETE_WINDOW", self.on_window_close)
+            extra.mainloop()
         else:
             # TODO: Emitir um alerta de que a janela já está aberta
             pass
+    
+    def func_book_readed(self, book_readed, hide_frame):
+
+        # mostrar
+        if book_readed.get():  
+            hide_frame.grid(column=0, columnspan=4, row=6, rowspan=4, sticky='nsew', pady=0, padx=10)
+        # ocultar
+        else: 
+            hide_frame.grid_forget()
+            
             
     def on_window_close(self):
         # Esta função será chamada quando a janela for fechada

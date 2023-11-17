@@ -18,10 +18,13 @@ class AnimatedButton(ctk.CTkButton):
 
 		super().__init__(
 			master = parent, 
-			text = 'A animated button', 
+			text = '', 
 			image = self.frames[self.frame_index],
-			command = self.trigger_animation)
-		self.pack(expand = True)
+			command = self.trigger_animation,bg_color='transparent',
+			fg_color='transparent', hover_color='yellow', ),
+
+		# self.pack(expand = True)
+		self.place(relx = 0.5, rely = 0.5, anchor = 'center')
 
 	def infinite_animate(self):
 		self.frame_index += 1
@@ -83,7 +86,7 @@ window.title('Animations')
 window.geometry('300x200')
 # ctk.set_appearance_mode('light')
 
-AnimatedButton(window, '3_style/3_9_image_animations/black', '3_style/3_9_image_animations/yellow')
+AnimatedButton(window, '3_style/3_9_image_animations/dark', '3_style/3_9_image_animations/light')
 
 # run
 window.mainloop()
