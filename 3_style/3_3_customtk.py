@@ -36,14 +36,14 @@ slider.pack(padx = 20, pady = 20)
 # exercise 
 switch = ctk.CTkSwitch(
 	window, 
-	text = 'Exercise Switch',
-	fg_color = ('blue','red'),
-	progress_color = 'pink',
-	button_color = 'green',
-	button_hover_color = 'yellow',
-	switch_width = 60,
-	switch_height = 30,
-	corner_radius = 2)
+	text = '',
+	button_length=1,
+	switch_width = 50,
+	switch_height = 25,
+ 	height=100,
+	
+	corner_radius = 100
+ 							)
 switch.pack()
 
 # run
